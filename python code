@@ -1,0 +1,30 @@
+from microbit import*
+import random
+snake = [(2,2)]
+dir = (0,1)
+food = (random.randint(0,4) , random.randint(0,4))
+def new_food():
+    while True:
+        position = (random.randint(0,4) , random.randint(0,4))
+        if position not in snake:
+            return position
+while True:
+    if button_a.was_pressed():
+        dir = (-dir[1],dir[0])
+    elif button_b.was_pressed():
+        dir = (dir[1],-dir[0])
+    head = snake[-1]
+    new_head = (( head[0] + dir[0] ) % 5 , ( head[1] + dir[1] ) % 5 )
+    if new_head in snake:
+        display.scroll("Game Over !")
+        break
+    snake.append(new_head)
+    if new_head == food:
+        food = new_food()
+    else:
+        snake.pop(0)
+    display.clear()
+    for s in snake :
+        display.set_pixel(s[0],s[1],9)    
+    display.set_pixel(food[0],food[1],5)
+    sleep(500)
